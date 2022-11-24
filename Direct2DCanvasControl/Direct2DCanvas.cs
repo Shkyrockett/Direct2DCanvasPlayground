@@ -82,7 +82,7 @@ namespace Direct2DCanvasControl
         public Direct2DCanvas()
         {
             InitializeComponent();
-            dcRenderTarget ??= InitializeDirect2DDCRenderTarget();
+            dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();
             if (bandBrush is not null) Marshal.ReleaseComObject(bandBrush);
             bandBrush = CreateBandBrush(dcRenderTarget!, ClientSize.Height);
 
@@ -146,7 +146,7 @@ namespace Direct2DCanvasControl
         /// <param name="e">The e.</param>
         protected unsafe override void OnPaint(PaintEventArgs e)
         {
-            dcRenderTarget ??= InitializeDirect2DDCRenderTarget();// Recreate resources if they have become invalid.
+            dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();// Recreate resources if they have become invalid.
             var hdc = e.Graphics.GetHdc();
 
             bindDc(dcRenderTarget!, new HDC(hdc), ClientRectangle);
@@ -155,12 +155,12 @@ namespace Direct2DCanvasControl
             e.Graphics.ReleaseHdc(hdc);
             dcRenderTarget?.BeginDraw();
             RenderScene(dcRenderTarget, bands!, ClientSize, gap, bandBrush!);
-            dcRenderTarget?.EndDraw();
-            //var result = RenderTarget?.EndDraw();
-            //if (result == HRESULT.D2DERR_RECREATE_TARGET)
-            //{
-            //    dcRenderTarget ??= InitializeDirect2DDCRenderTarget(); // Recreate resources if they have become invalid.
-            //}
+            //dcRenderTarget?.EndDraw();
+            var result = RenderTarget?.EndDraw();
+            if (result == HRESULT.D2DERR_RECREATE_TARGET)
+            {
+                dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>(); // Recreate resources if they have become invalid.
+            }
             Validate();
             base.OnPaint(e);
 
@@ -180,7 +180,7 @@ namespace Direct2DCanvasControl
         /// <param name="e">The e.</param>
         protected unsafe override void OnPaintBackground(PaintEventArgs e)
         {
-            dcRenderTarget ??= InitializeDirect2DDCRenderTarget();// Recreate resources if they have become invalid.
+            dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();// Recreate resources if they have become invalid.
             var hdc = e.Graphics.GetHdc();
 
             bindDc(dcRenderTarget!, new HDC(hdc), ClientRectangle);
@@ -189,12 +189,12 @@ namespace Direct2DCanvasControl
             e.Graphics.ReleaseHdc(hdc);
             dcRenderTarget?.BeginDraw();
             dcRenderTarget?.Clear(BackColor);
-            dcRenderTarget?.EndDraw();
-            //var result = RenderTarget?.EndDraw();
-            //if (result == HRESULT.D2DERR_RECREATE_TARGET)
-            //{
-            //    dcRenderTarget ??= InitializeDirect2DDCRenderTarget(); // Recreate resources if they have become invalid.
-            //}
+            //dcRenderTarget?.EndDraw();
+            var result = RenderTarget?.EndDraw();
+            if (result == HRESULT.D2DERR_RECREATE_TARGET)
+            {
+                dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>(); // Recreate resources if they have become invalid.
+            }
             Validate();
             base.OnPaintBackground(e);
 
@@ -212,9 +212,10 @@ namespace Direct2DCanvasControl
         /// <summary>
         /// Initializes Direct2D for use with a GDI DC.
         /// </summary>
-        private static unsafe ID2D1DCRenderTarget? InitializeDirect2DDCRenderTarget()
+        private static unsafe ID2D1DCRenderTarget? InitializeDirect2DDCRenderTarget<T>()
+            where T : ID2D1Factory
         {
-            var direct2dFactory = PInvoke.D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(ID2D1Factory7).GUID, new D2D1_FACTORY_OPTIONS(), out var factory) switch { var h when h == HRESULT.S_OK => factory as ID2D1Factory7, _ => throw new Exception("Unspecified Error") };
+            var direct2dFactory = PInvoke.D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(T).GUID, new D2D1_FACTORY_OPTIONS(), out var factory) switch { var h when h == HRESULT.S_OK => (T)factory, _ => throw new Exception("Unspecified Error") };
             direct2dFactory.CreateDCRenderTarget(new D2D1_RENDER_TARGET_PROPERTIES(D2D1_RENDER_TARGET_TYPE.D2D1_RENDER_TARGET_TYPE_DEFAULT, new D2D1_PIXEL_FORMAT(DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE.D2D1_ALPHA_MODE_IGNORE), 0, 0, D2D1_RENDER_TARGET_USAGE.D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE, D2D1_FEATURE_LEVEL.D2D1_FEATURE_LEVEL_DEFAULT), out var dCRenderTarget);
             Marshal.ReleaseComObject(direct2dFactory!);
             return dCRenderTarget;
@@ -249,21 +250,25 @@ namespace Direct2DCanvasControl
         /// <param name="brush">The brush.</param>
         private static unsafe void RenderScene(ID2D1DCRenderTarget? dcRenderTarget, (bool initiated, float value, float t, float start, float goal)[] bands, Size clientSize, int gap, ID2D1Brush brush)
         {
-            var bandCount = bands?.Length ?? 0;
-            var bandWidth = (clientSize.Width + gap) / bandCount;
-            var i = 0;
+            if (dcRenderTarget is null) return;
+            /*var pSize =*/
+            dcRenderTarget.GetPixelSize(out var pSize);
+            /*var size =*/
+            dcRenderTarget?.GetSize(out var size);
+            var dimentions = pSize/*.ToSize()*/; //clientSize;
 
-            var pSize = dcRenderTarget?.GetPixelSize();
-            var size = dcRenderTarget?.GetSize();
+            var bandCount = bands?.Length ?? 0;
+            var bandWidth = ((int)dimentions.width + gap) / bandCount;
+            var i = 0;
 
             if (bands is not null)
             {
                 foreach (var bandPercentage in bands)
                 {
-                    int left = i * bandWidth;
-                    float top = clientSize.Height * bandPercentage.value / 100f;
+                    int left = (i * bandWidth);
+                    float top = (float)dimentions.height * bandPercentage.value / 100f;
                     int width = bandWidth - gap;
-                    float height = clientSize.Height - (clientSize.Height * bandPercentage.value / 100f);
+                    float height = dimentions.height - dimentions.height * bandPercentage.value / 100f;
                     var rect = new RectangleF(left, top, width, height);
                     dcRenderTarget?.FillRectangle((D2D_RECT_F)rect, brush!);
                     i++;
