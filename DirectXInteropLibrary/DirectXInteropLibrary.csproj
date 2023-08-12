@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<VersionPrefix>0.0.0.1</VersionPrefix>
 		<VersionSuffix>Alpha</VersionSuffix>
-		<TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 		<Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
 		<OutputType>Library</OutputType>
 		<NeutralLanguage>en-US</NeutralLanguage>
@@ -12,7 +13,6 @@
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<Title>DirectXInteropLibrary</Title>
 		<Authors>Shkyrockett</Authors>
 		<Copyright>Copyright ©️ $(Company) 2022</Copyright>
@@ -51,11 +51,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.2.155-beta">
+	  <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.18-beta">
 	    <PrivateAssets>all</PrivateAssets>
 	    <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="38.0.19-preview" />
+	  <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="54.0.44-preview" />
 	</ItemGroup>
 
 </Project>

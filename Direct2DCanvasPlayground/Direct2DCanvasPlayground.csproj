@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<VersionPrefix>0.0.0.1</VersionPrefix>
 		<VersionSuffix>Alpha</VersionSuffix>
-		<TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 		<Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
 		<OutputType>WinExe</OutputType>
 		<NeutralLanguage>en-US</NeutralLanguage>
@@ -12,13 +13,11 @@
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<Title>Direct2DCanvasPlayground</Title>
 		<Authors>Shkyrockett</Authors>
-		<Copyright>Copyright © $(Company) 2017 - 2022</Copyright>
+		<Copyright>Copyright © 2017 - 2023 $(Company). All rights reserved.</Copyright>
 		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
 		<DocumentationFile>$(OutputPath)$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 		<PlatformTarget>$(Platform)</PlatformTarget>
 	</PropertyGroup>
 

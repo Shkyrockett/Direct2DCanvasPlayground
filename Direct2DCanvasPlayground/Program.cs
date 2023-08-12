@@ -1,13 +1,12 @@
 ﻿// <copyright file="Program.cs" company="Shkyrockett" >
-//     Copyright © 2017 - 2022 Shkyrockett. All rights reserved.
+// Copyright © 2017 - 2023 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
-//     Licensed under the MIT License. See LICENSE file in the project root for full license information.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </license>
 // <summary></summary>
-// <remarks>
-// </remarks>
+// <remarks></remarks>
 
 namespace Direct2DCanvasPlayground;
 
