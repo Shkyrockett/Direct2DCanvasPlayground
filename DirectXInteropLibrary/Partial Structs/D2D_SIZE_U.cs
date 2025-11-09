@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D_SIZE_U.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -49,7 +49,17 @@ namespace Windows.Win32
             /// The result of the conversion.
             /// </returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            public static implicit operator D2D_SIZE_U(Size size) => new((uint)size.Width, (uint)size.Height);
+            public static explicit operator D2D_SIZE_U(Size size) => new((uint)size.Width, (uint)size.Height);
+
+            /// <summary>
+            /// Performs an implicit conversion from <see cref="Size" /> to <see cref="D2D_SIZE_U" />.
+            /// </summary>
+            /// <param name="size">The size.</param>
+            /// <returns>
+            /// The result of the conversion.
+            /// </returns>
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            public static explicit operator Size(D2D_SIZE_U size) => new((int)size.width, (int)size.height);
 
             /// <summary>
             /// Converts to string.

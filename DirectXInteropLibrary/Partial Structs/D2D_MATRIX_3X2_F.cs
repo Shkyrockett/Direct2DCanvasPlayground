@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D_MATRIX_3X2_F.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -46,7 +46,7 @@ namespace Windows.Win32
             /// <value>
             /// The M11.
             /// </value>
-            public float M11 { [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)] readonly get => Anonymous.Anonymous1.m11;  [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)] set => Anonymous.Anonymous1.m11 = value; }
+            public float M11 { [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)] readonly get => Anonymous.Anonymous1.m11; [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)] set => Anonymous.Anonymous1.m11 = value; }
 
             /// <summary>
             /// Gets or sets the M12.

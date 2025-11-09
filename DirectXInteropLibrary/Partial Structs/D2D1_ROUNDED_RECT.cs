@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D1_ROUNDED_RECT.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>

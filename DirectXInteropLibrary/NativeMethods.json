@@ -2,10 +2,18 @@
   "$schema": "https://aka.ms/CsWin32.schema.json",
   "allowMarshaling": true,
   "className": "PInvoke",
-  "emitSingleFile": false,
-  "public": true,
-  "wideCharOnly": true,
   "comInterop": {
-    "preserveSigMethods": []
-  }
+    "preserveSig": true,
+    "preserveSigMethods": ["*"],
+    "useIntPtrForComOutPointers": false//,
+    //"useComSourceGenerators": false // Sadly, creates structs instead of interfaces so polymorphism doesn't work.
+  },
+  "emitSingleFile": false,
+  "friendlyOverloads": {
+    "enabled": true
+  },
+  "multiTargetingFriendlyAPIs": true,
+  "public": true,
+  "useSafeHandles": false,
+  "wideCharOnly": true
 }

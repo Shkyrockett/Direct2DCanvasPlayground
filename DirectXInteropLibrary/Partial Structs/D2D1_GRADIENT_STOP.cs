@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D1_GRADIENT_STOP.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -10,11 +10,10 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Windows.Win32.Graphics.Direct2D.Common;
 
 namespace Windows.Win32
 {
-    namespace Graphics.Direct2D
+    namespace Graphics.Direct2D.Common
     {
         /// <summary>
         /// 

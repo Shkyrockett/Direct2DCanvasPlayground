@@ -1,35 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<VersionPrefix>0.0.0.1</VersionPrefix>
-		<VersionSuffix>Alpha</VersionSuffix>
-		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
-		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
-		<Platforms>AnyCPU;ARM32;ARM64;x64;x86</Platforms>
 		<OutputType>Library</OutputType>
-		<NeutralLanguage>en-US</NeutralLanguage>
+		<TargetFramework>$(TargetFramework)-windows$(SupportedOSPlatformVersion)</TargetFramework>
+		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>preview</LangVersion>
-		<Nullable>enable</Nullable>
-		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Title>DirectXInteropLibrary</Title>
-		<Authors>Shkyrockett</Authors>
-		<Copyright>Copyright ©️ $(Company) 2022</Copyright>
+		<Description>Playground for experimenting with auto generating interop API for working with Direct Write.</Description>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
-		<DocumentationFile>$(OutputPath)$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-		<PlatformTarget>$(Platform)</PlatformTarget>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<Optimize>true</Optimize>
+		<CsWin32RunAsBuildTask>true</CsWin32RunAsBuildTask>
+		<DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+		<!--<PublishAot>true</PublishAot>-->
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\.editorconfig" Link="Properties\.editorconfig" />
+		<None Include="..\LICENSE.md" Link="Properties\LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md" Link="Properties\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<Compile Update="Properties\Resources.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
@@ -51,11 +48,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.18-beta">
-	    <PrivateAssets>all</PrivateAssets>
-	    <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
-	  </PackageReference>
-	  <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="54.0.44-preview" />
+		<PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.242">
+			<PrivateAssets>all</PrivateAssets>
+			<!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+		</PackageReference>
+		<PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="67.0.4-preview" />
 	</ItemGroup>
 
 </Project>

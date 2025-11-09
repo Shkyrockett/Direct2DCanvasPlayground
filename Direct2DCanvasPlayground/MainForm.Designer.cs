@@ -1,5 +1,5 @@
-﻿// <copyright file="Form1.Designer.cs" company="Shkyrockett" >
-// Copyright © 2017 - 2023 Shkyrockett. All rights reserved.
+﻿// <copyright file="MainForm.Designer.cs" company="Shkyrockett" >
+// Copyright © 2017 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -11,10 +11,10 @@
 namespace Direct2DCanvasPlayground;
 
 /// <summary>
-/// The form1.
+/// The MainForm.
 /// </summary>
 /// <seealso cref="System.Windows.Forms.Form" />
-partial class Form1
+partial class MainForm
 {
     /// <summary>
     /// Required designer variable.
@@ -37,9 +37,9 @@ partial class Form1
     /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
     protected override void Dispose(bool disposing)
     {
-        if (disposing && (components is not null))
+        if (disposing)
         {
-            components.Dispose();
+            components?.Dispose();
         }
 
         base.Dispose(disposing);
@@ -75,7 +75,7 @@ partial class Form1
         this.direct2DCanvas1.Size = new System.Drawing.Size(339, 269);
         this.direct2DCanvas1.TabIndex = 2;
         // 
-        // Form1
+        // MainForm
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,11 +83,10 @@ partial class Form1
         this.Controls.Add(this.direct2DCanvas1);
         this.Controls.Add(this.toolStrip1);
         this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-        this.Name = "Form1";
-        this.Text = "Form1";
+        this.Name = "MainForm";
+        this.Text = "UV Meter";
         this.ResumeLayout(false);
         this.PerformLayout();
-
     }
     #endregion
 }

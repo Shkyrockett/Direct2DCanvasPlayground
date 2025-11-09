@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D_RECT_F.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -54,6 +54,16 @@ namespace Windows.Win32
             /// </returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             public static implicit operator D2D_RECT_F(RectangleF rect) => new(rect.Left, rect.Top, rect.Right, rect.Bottom);
+
+            /// <summary>
+            /// Performs an implicit conversion from <see cref="D2D_RECT_F"/> to <see cref="RectangleF"/>.
+            /// </summary>
+            /// <param name="rect">The rect.</param>
+            /// <returns>
+            /// The result of the conversion.
+            /// </returns>
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            public static explicit operator RectangleF(D2D_RECT_F rect) => RectangleF.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
             /// <summary>
             /// Converts to string.

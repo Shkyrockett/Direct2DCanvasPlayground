@@ -1,5 +1,5 @@
 ﻿// <copyright file="WindowsMessages.cs" company="Shkyrockett" >
-// Copyright © 2017 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2017 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>

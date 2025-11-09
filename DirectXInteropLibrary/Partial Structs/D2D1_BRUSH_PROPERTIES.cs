@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D1_BRUSH_PROPERTIES.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -38,7 +38,7 @@ namespace Windows.Win32
             /// <param name="transform">The transform.</param>
             [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             public D2D1_BRUSH_PROPERTIES(float opacity, Matrix3x2 transform)
-                :this(opacity,(D2D_MATRIX_3X2_F)transform)
+                : this(opacity, (D2D_MATRIX_3X2_F)transform)
             { }
 
             /// <summary>

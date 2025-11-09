@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D1_COLOR_F.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -54,6 +54,16 @@ namespace Windows.Win32
             /// </returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             public static implicit operator D2D1_COLOR_F(Color color) => new(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+
+            /// <summary>
+            /// Performs an implicit conversion from <see cref="Color"/> to <see cref="D2D1_COLOR_F"/>.
+            /// </summary>
+            /// <param name="color">The color.</param>
+            /// <returns>
+            /// The result of the conversion.
+            /// </returns>
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            public static explicit operator Color(D2D1_COLOR_F color) => Color.FromArgb((int)(color.r * 255), (int)(color.g * 255), (int)(color.b * 255), (int)(color.a * 255));
 
             /// <summary>
             /// Converts to string.

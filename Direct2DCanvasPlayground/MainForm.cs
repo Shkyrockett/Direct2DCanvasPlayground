@@ -1,5 +1,5 @@
-﻿// <copyright file="Form1.cs" company="Shkyrockett" >
-// Copyright © 2017 - 2023 Shkyrockett. All rights reserved.
+﻿// <copyright file="MainForm.cs" company="Shkyrockett" >
+// Copyright © 2017 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -11,16 +11,16 @@
 namespace Direct2DCanvasPlayground;
 
 /// <summary>
-/// The form1 class.
+/// The MainForm class.
 /// </summary>
 /// <seealso cref="System.Windows.Forms.Form" />
-public partial class Form1
+public partial class MainForm
     : Form
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Form1" /> class.
+    /// Initializes a new instance of the <see cref="MainForm" /> class.
     /// </summary>
-    public Form1()
+    public MainForm()
     {
         InitializeComponent();
     }

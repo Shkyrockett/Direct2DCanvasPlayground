@@ -1,5 +1,5 @@
 ﻿// <copyright file="D2D_POINT_2F.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -61,6 +61,26 @@ namespace Windows.Win32
             /// </returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             public static implicit operator D2D_POINT_2F(Vector2 value) => Unsafe.As<Vector2, D2D_POINT_2F>(ref value);
+
+            /// <summary>
+            /// Performs an implicit conversion from <see cref="D2D_POINT_2F"/> to <see cref="PointF"/>.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            /// <returns>
+            /// The result of the conversion.
+            /// </returns>
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            public static explicit operator PointF(D2D_POINT_2F value) => Unsafe.As<D2D_POINT_2F, PointF>(ref value);
+
+            /// <summary>
+            /// Performs an implicit conversion from <see cref="D2D_POINT_2F"/> to <see cref="Vector2"/>.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            /// <returns>
+            /// The result of the conversion.
+            /// </returns>
+            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            public static explicit operator Vector2(D2D_POINT_2F value) => Unsafe.As<D2D_POINT_2F, Vector2>(ref value);
 
             /// <summary>
             /// Converts to string.

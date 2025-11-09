@@ -1,5 +1,5 @@
 ﻿// <copyright file="DirectXCanvas.cs" company="Shkyrockett" >
-// Copyright © 2017 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2017 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -18,7 +18,6 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Direct2D;
 using Windows.Win32.Graphics.Direct2D.Common;
 using Windows.Win32.Graphics.Dxgi.Common;
-using Windows.Win32.Graphics.Gdi;
 
 namespace Direct2DCanvasControl;
 
@@ -87,7 +86,7 @@ public partial class Direct2DCanvas
     {
         InitializeComponent();
         dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();
-        if (bandBrush is not null) Marshal.ReleaseComObject(bandBrush);
+        if (bandBrush is not null) Marshal.Release(Marshal.GetIUnknownForObject(bandBrush));
         bandBrush = CreateBandBrush(dcRenderTarget!, ClientSize.Height);
 
         bands ??= new (bool initiated, float value, float t, float start, float goal)[bandCount];
@@ -137,7 +136,7 @@ public partial class Direct2DCanvas
     {
         if (dcRenderTarget is not null)
         {
-            if (bandBrush is not null) Marshal.ReleaseComObject(bandBrush);
+            if (bandBrush is not null) Marshal.Release(Marshal.GetIUnknownForObject(bandBrush));
             bandBrush = CreateBandBrush(dcRenderTarget, ClientSize.Height);
         }
 
@@ -161,7 +160,7 @@ public partial class Direct2DCanvas
         {
             Debug.Print($"tag1={tag1}, tag2={tag2}");
         }
-        
+
         if (result == HRESULT.D2DERR_RECREATE_TARGET)
         {
             dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>(); // Recreate resources if they have become invalid.
@@ -207,7 +206,7 @@ public partial class Direct2DCanvas
     {
         var direct2dFactory = PInvoke.D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(T).GUID, new D2D1_FACTORY_OPTIONS(), out var factory) switch { var h when h == HRESULT.S_OK => (T)factory, _ => throw new Exception("Unspecified Error") };
         direct2dFactory.CreateDCRenderTarget(new D2D1_RENDER_TARGET_PROPERTIES(D2D1_RENDER_TARGET_TYPE.D2D1_RENDER_TARGET_TYPE_DEFAULT, new D2D1_PIXEL_FORMAT(DXGI_FORMAT.DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE.D2D1_ALPHA_MODE_IGNORE), 0, 0, D2D1_RENDER_TARGET_USAGE.D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE, D2D1_FEATURE_LEVEL.D2D1_FEATURE_LEVEL_DEFAULT), out var dCRenderTarget);
-        Marshal.ReleaseComObject(direct2dFactory!);
+        Marshal.Release(Marshal.GetIUnknownForObject(direct2dFactory!));
         return dCRenderTarget;
     }
 
@@ -220,16 +219,16 @@ public partial class Direct2DCanvas
     private static unsafe ID2D1LinearGradientBrush CreateBandBrush(ID2D1RenderTarget renderTarget, float height)
     {
         var properties = new D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES(new(0, height), new(0, 0));
-        ReadOnlySpan<D2D1_GRADIENT_STOP> stops = stackalloc[]
-        {
+        ReadOnlySpan<D2D1_GRADIENT_STOP> stops =
+        [
             new D2D1_GRADIENT_STOP(0.0f, Color.Green),
             new D2D1_GRADIENT_STOP(0.85f, Color.Yellow),
             new D2D1_GRADIENT_STOP(1.0f, Color.Red)
-        };
+        ];
         renderTarget.CreateGradientStopCollection(stops, D2D1_GAMMA.D2D1_GAMMA_1_0, D2D1_EXTEND_MODE.D2D1_EXTEND_MODE_CLAMP, out var gradientStops);
         var prop = new D2D1_BRUSH_PROPERTIES(1f, Matrix3x2.Identity);
         renderTarget.CreateLinearGradientBrush(properties, prop, gradientStops, out var bandBrush);
-        if (gradientStops is not null) Marshal.ReleaseComObject(gradientStops);
+        if (gradientStops is not null) Marshal.Release(Marshal.GetIUnknownForObject(gradientStops));
         return bandBrush;
     }
 
@@ -245,12 +244,10 @@ public partial class Direct2DCanvas
     private static unsafe void RenderScene(ID2D1DCRenderTarget? dcRenderTarget, (bool initiated, float value, float t, float start, float goal)[] bands, Size clientSize, int gap, ID2D1Brush brush)
     {
         if (dcRenderTarget is null) return;
-        /*var pSize =*/
-        dcRenderTarget.GetPixelSize(out var pSize);
-        /*var size =*/
-        dcRenderTarget.GetSize(out var size);
+        var pSize = dcRenderTarget.GetPixelSize();
+        var size = dcRenderTarget.GetSize();
         _ = size;
-        var dimensions = pSize/*.ToSize()*/; //clientSize;
+        var dimensions = pSize;
         _ = clientSize;
 
         var bandCount = bands?.Length ?? 0;
@@ -261,10 +258,10 @@ public partial class Direct2DCanvas
         {
             foreach (var (initiated, value, t, start, goal) in bands)
             {
-                int left = (i * bandWidth);
-                float top = (float)dimensions.height * value / 100f;
-                int width = bandWidth - gap;
-                float height = dimensions.height - dimensions.height * value / 100f;
+                var left = i * bandWidth;
+                var top = dimensions.height * value / 100f;
+                var width = bandWidth - gap;
+                var height = dimensions.height - dimensions.height * value / 100f;
                 var rectangle = new RectangleF(left, top, width, height);
                 dcRenderTarget?.FillRectangle((D2D_RECT_F)rectangle, brush!);
                 i++;
@@ -280,49 +277,74 @@ public partial class Direct2DCanvas
     {
         if (updating) return;
         updating = true;
-        var phase = 0;
-        var center = 100; // 200; // 128;
-        var width = 55; // 127;
-
-        if (cycleCount > 0xff)
-        {
-            cycleCount = 0;
-        }
 
         cycleCount++;
+        if (cycleCount > 0xff) cycleCount = 0;
+
+        // Background color animation.
+        var phase = 0;
+        var center = 100;
+        var width = 55;
 
         BackColor = Color.FromArgb(0xff,
             (int)Math.Floor(Math.Sin(frequency * cycleCount + 0 + phase) * width + center),
             (int)Math.Floor(Math.Sin(frequency * cycleCount + 2 + phase) * width + center),
             (int)Math.Floor(Math.Sin(frequency * cycleCount + 4 + phase) * width + center));
 
-        if (bands is not null)
-            for (var i = 0; i < bandCount; i++)
+        if (bands != null)
+        {
+            for (int i = 0; i < bandCount; i++)
             {
-                if (!bands[i].initiated)
+                var band = bands[i];
+
+                if (!band.initiated)
                 {
-                    var s = random?.Next(1, 99) ?? 1;
-                    var g = random?.Next(1, 99) ?? 99;
-                    bands[i] = new(true, s, 0, s, g);
+                    float start = random?.Next(1, 99) ?? 1;
+                    float goal = random?.Next(1, 99) ?? 99;
+                    band = new(true, start, 0, start, goal);
                 }
                 else
                 {
-                    if (float.IsNaN(bands[i].start)) bands[i].start = random?.Next(1, 99) ?? 1;
-                    var distance = (int)Distance(bands[i].start, bands[i].goal);
-                    bands[i].value = Linear(bands[i].t, bands[i].start, bands[i].goal, distance);
-                    int sign = Math.Sign(bands[i].goal - bands[i].start);
-                    bands[i].t += 1 * sign;
-                    if ((bands[i].value == 0 && bands[i].goal == 0)
-                        || (sign == 1 && bands[i].value >= bands[i].goal)
-                        || (sign == -1 && bands[i].value <= bands[i].goal)
-                        || (sign == 0))
-                    {
-                        bands[i].t = 0;
-                        bands[i].start = bands[i].value;
-                        bands[i].goal = random?.Next(1, 99) ?? 1;
-                    }
+                    // Normalized position (-1..1).
+                    float normPos = (i - (bandCount - 1) / 2f) / ((bandCount - 1) / 2f);
+
+                    // Bell curve for height: center high, edges low.
+                    float sigma = 0.45f;
+                    float bellHeight = 1f - MathF.Exp(-0.5f * (normPos * normPos) / (sigma * sigma)); // 0..1
+
+                    // Minimum height fraction: ensures bars never stuck at 0.
+                    float minHeightFrac = 0.01f;
+
+                    // Random base target, scaled by bellHeight.
+                    float r = (float)(random?.NextDouble() ?? 0.5);
+                    float target = minHeightFrac * 100f + r * 100f * bellHeight;
+
+                    // Smoothly move toward target.
+                    float alpha = target > band.value ? 0.4f : 0.1f;
+                    float current = band.value + (target - band.value) * alpha;
+
+                    // Flicker amplitude weighting. Use a separate curve for flicker so center is stronger.
+                    float flickerBaseAmp = 5f;
+
+                    // Flicker stronger and faster at center
+                    float flickerWeight = MathF.Pow(8 - bellHeight, 0.25f);   // slightly lower exponent = more jump
+                    float flickerFreq = 0.18f + 0.35f * (1 - bellHeight);  // faster at center
+                    float flickerPhase = i * 0.3f + (float)(random?.NextDouble() ?? 0.0) * 0.5f;
+
+                    float flicker = MathF.Cos(cycleCount * flickerFreq + flickerPhase)
+                                  * flickerBaseAmp
+                                  * flickerWeight;
+
+                    // Add a small negative offset to allow bars to dip lower
+                    current += flicker - flickerBaseAmp * 0.15f;
+
+                    // Clamp to 0–100.
+                    band.value = Math.Clamp(current, 0f, 100f);
                 }
+
+                bands[i] = band;
             }
+        }
 
         updating = false;
     }

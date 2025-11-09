@@ -1,5 +1,5 @@
 ﻿// <copyright file="FriendlyOverloadExtensions.TypeConversions.cs" company="Shkyrockett" >
-// Copyright © 2020 - 2023 Shkyrockett. All rights reserved.
+// Copyright © 2020 - 2025 Shkyrockett. All rights reserved.
 // </copyright>
 // <author id="shkyrockett">Shkyrockett</author>
 // <license>
@@ -148,6 +148,16 @@ public static partial class FriendlyOverloadExtensions
     public static Color ToColor(this D2D1_COLOR_F color) => Color.FromArgb((int)(color.a * 255), (int)(color.r * 255), (int)(color.g * 255), (int)(color.b * 255));
 
     /// <summary>
+    /// Converts a Rectangle to a D2D_RECT_F.
+    /// </summary>
+    /// <param name="rect">The rect.</param>
+    /// <returns>
+    /// A D2D_RECT_F.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static D2D_RECT_F ToD2D_RECT_F(this Rectangle rect) => new() { left = (uint)rect.Left, top = (uint)rect.Top, right = (uint)rect.Right, bottom = (uint)rect.Bottom };
+
+    /// <summary>
     /// Converts a RectangleF to a D2D_RECT_F.
     /// </summary>
     /// <param name="rect">The rect.</param>
@@ -158,16 +168,6 @@ public static partial class FriendlyOverloadExtensions
     public static D2D_RECT_F ToD2D_RECT_F(this RectangleF rect) => new() { left = rect.Left, top = rect.Top, right = rect.Right, bottom = rect.Bottom };
 
     /// <summary>
-    /// Converts a D2D_RECT_F to a RectangleF.
-    /// </summary>
-    /// <param name="rect">The rect.</param>
-    /// <returns>
-    /// A RectangleF.
-    /// </returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static RectangleF ToD2D_RECT_F(this D2D_RECT_F rect) => RectangleF.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
-
-    /// <summary>
     /// Converts a Rectangle to a D2D_RECT_U.
     /// </summary>
     /// <param name="rect">The rect.</param>
@@ -175,7 +175,7 @@ public static partial class FriendlyOverloadExtensions
     /// A D2D_RECT_U.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static D2D_RECT_U ToD2D_RECT_F(this Rectangle rect) => new() { left = (uint)rect.Left, top = (uint)rect.Top, right = (uint)rect.Right, bottom = (uint)rect.Bottom };
+    public static D2D_RECT_U ToD2D_RECT_U(this Rectangle rect) => new() { left = (uint)rect.Left, top = (uint)rect.Top, right = (uint)rect.Right, bottom = (uint)rect.Bottom };
 
     /// <summary>
     /// Converts a D2D_RECT_U to a Rectangle.
@@ -185,7 +185,17 @@ public static partial class FriendlyOverloadExtensions
     /// A Rectangle.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Rectangle ToD2D_RECT_U(this D2D_RECT_U rect) => Rectangle.FromLTRB((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+    public static Rectangle ToRectangle(this D2D_RECT_U rect) => Rectangle.FromLTRB((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+
+    /// <summary>
+    /// Converts a D2D_RECT_F to a RectangleF.
+    /// </summary>
+    /// <param name="rect">The rect.</param>
+    /// <returns>
+    /// A RectangleF.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static RectangleF ToRectangleF(this D2D_RECT_F rect) => RectangleF.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
 
     /// <summary>
     /// Converts a Rectangle to a RECT.
@@ -195,7 +205,7 @@ public static partial class FriendlyOverloadExtensions
     /// A Windows.Win32.Foundation.RECT.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Foundation.RECT ToD2D_RECT(this Rectangle rect) => new() { left = rect.Left, top = rect.Top, right = rect.Right, bottom = rect.Bottom };
+    public static Foundation.RECT ToRECT(this Rectangle rect) => new() { left = rect.Left, top = rect.Top, right = rect.Right, bottom = rect.Bottom };
 
     /// <summary>
     /// Converts a D2D_MATRIX_3X2_F to a Matrix3x2.
@@ -262,5 +272,40 @@ public static partial class FriendlyOverloadExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     // Using TTo As<TFrom, TTo>(ref TFrom source) to do the direct cast because the structures are the same shape and can be blited interchangeably.
     public static D2D_MATRIX_3X2_F ToD2D_MATRIX_3X2_F(this DWRITE_MATRIX matrix) => Unsafe.As<DWRITE_MATRIX, D2D_MATRIX_3X2_F>(ref matrix);
+
+    ///// <summary>
+    ///// Converts the image to bitmap.
+    ///// https://stackoverflow.com/a/31165846
+    ///// </summary>
+    ///// <param name="pImg">The p img.</param>
+    ///// <param name="size">The size.</param>
+    ///// <returns></returns>
+    //[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    //public static unsafe ID2D1Bitmap ConvertImageToBitmap(ID2D1Image pImg, D2D_SIZE_U size)
+    //{
+    //    ID2D1Image* oldTarget = null;
+    //    ID2D1Bitmap* targetBitmap = null;
+
+    //    //Create a Bitmap with "D2D1_BITMAP_OPTIONS_TARGET"
+    //    D2D1_BITMAP_PROPERTIES1 bitmapProperties =
+    //        D2D1.BitmapProperties1(
+    //        D2D1_BITMAP_OPTIONS_TARGET,
+    //        D2D1.PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+    //    );
+    //    pDeviceContext.CreateBitmap(size, 0, 0, bitmapProperties, &targetBitmap);
+
+    //    //Save current Target, replace by ID2D1Bitmap
+    //    pDeviceContext.GetTarget(&oldTarget);
+    //    pDeviceContext.SetTarget(targetBitmap);
+    //    //Draw Image on Target (if currently not drawing also call Begin/EndDraw)
+    //    pDeviceContext.DrawImage(pImg);
+
+    //    //Set previous Target
+    //    pDeviceContext.SetTarget(oldTarget);
+
+    //    oldTarget.Release();
+
+    //    return &targetBitmap;
+    //}
     #endregion
 }

@@ -1,0 +1,19 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Direct2DCanvasControl/Direct2DCanvasControl.csproj" />
+  <Project Path="Direct2DCanvasPlayground/Direct2DCanvasPlayground.csproj" />
+  <Project Path="DirectXInteropLibrary/DirectXInteropLibrary.csproj" />
+</Solution>
