@@ -147,7 +147,7 @@ public partial class Direct2DCanvas
     /// Raises the <see cref="E:System.Windows.Forms.Control.Paint" /> event.
     /// </summary>
     /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs" /> that contains the event data.</param>
-    protected unsafe override void OnPaint(PaintEventArgs e)
+    protected override void OnPaint(PaintEventArgs e)
     {
         dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();// Recreate resources if they have become invalid.
         dcRenderTarget?.BindDC(e.Graphics, ClientRectangle);
@@ -173,7 +173,7 @@ public partial class Direct2DCanvas
     /// Paints the background of the control.
     /// </summary>
     /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs" /> that contains the event data.</param>
-    protected unsafe override void OnPaintBackground(PaintEventArgs e)
+    protected override void OnPaintBackground(PaintEventArgs e)
     {
         dcRenderTarget ??= InitializeDirect2DDCRenderTarget<ID2D1Factory7>();// Recreate resources if they have become invalid.
         dcRenderTarget?.BindDC(e.Graphics, ClientRectangle);
@@ -201,7 +201,7 @@ public partial class Direct2DCanvas
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    private static unsafe ID2D1DCRenderTarget? InitializeDirect2DDCRenderTarget<T>()
+    private static ID2D1DCRenderTarget? InitializeDirect2DDCRenderTarget<T>()
         where T : ID2D1Factory
     {
         var direct2dFactory = PInvoke.D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(T).GUID, new D2D1_FACTORY_OPTIONS(), out var factory) switch { var h when h == HRESULT.S_OK => (T)factory, _ => throw new Exception("Unspecified Error") };
@@ -216,7 +216,7 @@ public partial class Direct2DCanvas
     /// <param name="renderTarget">The render target.</param>
     /// <param name="height">The height.</param>
     /// <returns></returns>
-    private static unsafe ID2D1LinearGradientBrush CreateBandBrush(ID2D1RenderTarget renderTarget, float height)
+    private static ID2D1LinearGradientBrush CreateBandBrush(ID2D1RenderTarget renderTarget, float height)
     {
         var properties = new D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES(new(0, height), new(0, 0));
         ReadOnlySpan<D2D1_GRADIENT_STOP> stops =
@@ -241,7 +241,7 @@ public partial class Direct2DCanvas
     /// <param name="gap">The gap.</param>
     /// <param name="brush">The brush.</param>
     /// <returns></returns>
-    private static unsafe void RenderScene(ID2D1DCRenderTarget? dcRenderTarget, (bool initiated, float value, float t, float start, float goal)[] bands, Size clientSize, int gap, ID2D1Brush brush)
+    private static void RenderScene(ID2D1DCRenderTarget? dcRenderTarget, (bool initiated, float value, float t, float start, float goal)[] bands, Size clientSize, int gap, ID2D1Brush brush)
     {
         if (dcRenderTarget is null) return;
         var pSize = dcRenderTarget.GetPixelSize();
